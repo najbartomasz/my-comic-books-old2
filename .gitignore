@@ -1,0 +1,13 @@
+# VSCode
+.vscode/
+
+# TS/JS
+node_modules/
+coverage/
+dist/
+
+# SonarQube
+.scannerwork/
+
+# Monorepo
+lerna-debug.log

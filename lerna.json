@@ -1,0 +1,13 @@
+{
+    "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+    "useWorkspaces": false,
+    "version": "0.0.0",
+    "command": {
+        "init": {
+            "exact": true
+        }
+    },
+    "packages": [
+        "packages/libs/*"
+    ]
+}

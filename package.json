@@ -1,0 +1,12 @@
+{
+    "name": "my-comic-books",
+    "version": "0.0.0",
+    "author": "Tomasz Najbar  <najbartomasz@gmail.com>",
+    "description": "my comic books collection app",
+    "main": "index.js",
+    "scripts": {},
+    "license": "UNLICENSED",
+    "devDependencies": {
+        "lerna": "6.1.0"
+    }
+}
