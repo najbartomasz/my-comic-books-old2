@@ -1120,7 +1120,7 @@
         "@typescript-eslint/parameter-properties": [
             "error",
             {
-                "allows": [
+                "allow": [
                     "readonly",
                     "private",
                     "protected",
