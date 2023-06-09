@@ -8,15 +8,19 @@
         "forceConsistentCasingInFileNames": true,
         "importsNotUsedAsValues": "remove",
         "isolatedModules": true,
-        "module": "ESNext",
+        "module": "esnext",
+        "moduleResolution": "node",
         "newLine": "lf",
         "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
         "noPropertyAccessFromIndexSignature": true,
         "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
         "removeComments": true,
+        "resolveJsonModule": true,
         "skipLibCheck": true,
         "strict": true,
-        "target": "ESNext"
+        "target": "esnext",
+        "useUnknownInCatchVariables": true
     }
 }

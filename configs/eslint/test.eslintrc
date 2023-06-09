@@ -1,5 +1,5 @@
 {
-    // "extends": "./.eslintrc", // env "node" set to true
+    "extends": "./node.eslintrc",
     "rules": {
         "id-denylist": "off",
         "max-nested-callbacks": [
@@ -115,6 +115,9 @@
         // IMPORT - HELPFUL WARNINGS
         "import/no-unused-modules": "off",
         // IMPORT - MODULE SYSTEMS
-        "import/unambiguous": "off"
+        "import/unambiguous": "off",
+        // IMPORT STYLE GUIDE
+        "import/no-namespace": "off"
+
     }
 }

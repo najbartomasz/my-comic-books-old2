@@ -1,6 +1,6 @@
 {
     "env": {
-        "es2021": true,
+        "es2022": true,
         "jest": true
         // "node": true
         // "browser": true
@@ -142,7 +142,7 @@
             "error",
             {
                 "setWithoutGet": true,
-                "getWithoutSet": true
+                "getWithoutSet": false
             }
         ],
         "arrow-body-style": [
@@ -265,7 +265,7 @@
         ],
         "max-params": [
             "error",
-            4
+            5
         ],
         "max-statements": [
             "error",
@@ -537,11 +537,11 @@
         ],
         "array-bracket-spacing": [
             "error",
-            "always",
+            "never",
             {
-                "arraysInArrays": true,
-                "objectsInArrays": true,
-                "singleValue": true
+                "arraysInArrays": false,
+                "objectsInArrays": false,
+                "singleValue": false
             }
         ],
         "array-element-newline": [
@@ -1259,7 +1259,7 @@
             "error",
             {
                 "checkIntersections": true,
-                "checkUnions": true,
+                "checkUnions": false,
                 "groupOrder": [
                     "named",
                     "keyword",
@@ -1347,16 +1347,17 @@
             }
         ],
         "@typescript-eslint/default-param-last": "error", // "default-param-last": "off"
-        "@typescript-eslint/dot-notation": [ //"dot-notation": "off"
-            "error",
-            {
-                "allowKeywords": false,
-                "allowPattern": "",
-                "allowPrivateClassPropertyAccess": false,
-                "allowProtectedClassPropertyAccess": false,
-                "allowIndexSignaturePropertyAccess": false
-            }
-        ],
+        "@typescript-eslint/dot-notation": "off",
+        // [ //"dot-notation": "off"
+        //     "error",
+        //     {
+        //         "allowKeywords": false,
+        //         "allowPattern": "",
+        //         "allowPrivateClassPropertyAccess": false,
+        //         "allowProtectedClassPropertyAccess": false,
+        //         "allowIndexSignaturePropertyAccess": false
+        //     }
+        // ],
         "@typescript-eslint/func-call-spacing": [ // "func-call-spacing": "off"
             "error",
             "never"
@@ -1447,7 +1448,7 @@
             {
                 "detectObjects": true,
                 "enforceConst": true,
-                "ignoreDefaultValues": false,
+                "ignoreDefaultValues": true,
                 "ignoreEnums": true,
                 "ignoreNumericLiteralTypes": false,
                 "ignoreReadonlyClassProperties": true,
@@ -1637,7 +1638,7 @@
         "import/no-default-export": "error",
         "import/no-named-export": "off",
         "import/no-anonymous-default-export": "error",
-        "import/group-exports": "error",
+        "import/group-exports": "off",
         "import/dynamic-import-chunkname": "error"
     }
 }

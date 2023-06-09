@@ -1,51 +1,32 @@
 import type { LogAppender } from './log-appenders/log-appender.model';
 import type { LoggerFactory } from './logger-factory.model';
 import type { LoggerFactoryBuilder } from './logger-factory-builder.model';
+import type { LoggerOptions } from './logger-options.model';
 
-import { ConsoleLogFormat } from './log-appenders/console-log-format';
-import { LogLevel } from './log-appenders/log-level';
-import { consoleLogAppenderFactory } from './log-appenders/console-log-appender-factory';
+import { LogFormat } from './log-appenders/log/log-format';
+import { createConsoleLogAppender } from './log-appenders/console-log-appender';
+import { createHttpLogAppender } from './log-appenders/http-log-appender';
 import { createLoggerFactory } from './logger-factory';
-import { utils } from './utils';
+import { createPrintableLogEntry } from './log-appenders/log/printable-log-entry';
 
-interface LoggerFactoryBuilderState {
-    consoleLogAppender?: LogAppender;
-}
-
-const cloneState = (state: LoggerFactoryBuilderState): LoggerFactoryBuilderState => (
-    JSON.parse(JSON.stringify(state)) as LoggerFactoryBuilderState
-);
-
-const createFactoryBuilder = (state: Readonly<LoggerFactoryBuilderState> = {}): LoggerFactoryBuilder => ({
-    addPrettyConsoleLogger: (): LoggerFactoryBuilder => {
-        const newState = {
-            ...cloneState(state),
-            consoleLogAppender: consoleLogAppenderFactory.createLogAppender(ConsoleLogFormat.Pretty)
-        };
-
-        return createFactoryBuilder(newState);
-    },
-    addJsonConsoleLogger: (): LoggerFactoryBuilder => {
-        const newState = {
-            ...cloneState(state),
-            consoleLogAppender: consoleLogAppenderFactory.createLogAppender(ConsoleLogFormat.Json)
-        };
-
-        return createFactoryBuilder(newState);
-    },
+const createFactoryBuilder = (options: LoggerOptions): LoggerFactoryBuilder => ({
+    addPrettyConsoleLogger: (): LoggerFactoryBuilder =>
+        createFactoryBuilder({ ...options, logFormat: LogFormat.Pretty }),
+    addJsonConsoleLogger: (): LoggerFactoryBuilder =>
+        createFactoryBuilder({ ...options, logFormat: LogFormat.Json }),
+    addHttpLogger: (url: string, maxLogBufferSizeInMb = 1, sendRetryTimer = 100): LoggerFactoryBuilder =>
+        createFactoryBuilder({ ...options, httpServer: { url, maxLogBufferSizeInMb, sendRetryTimer } }),
     build: (): LoggerFactory => {
-        const logAppenders = Object.values(state);
-        if (logAppenders.length) {
-            return createLoggerFactory(logAppenders);
+        const logAppenders: LogAppender[] = [
+            createConsoleLogAppender(options.logFormat ?? LogFormat.Pretty, createPrintableLogEntry)
+        ];
+        const { httpServer } = options;
+        if (httpServer) {
+            const { url, maxLogBufferSizeInMb, sendRetryTimer } = httpServer;
+            logAppenders.push(createHttpLogAppender(url, maxLogBufferSizeInMb, sendRetryTimer));
         }
-
-        const consoleLogAppender = consoleLogAppenderFactory.createLogAppender(ConsoleLogFormat.Pretty);
-        const warnMessage = 'No logger were added. Adding Pretty Console Logger by default.';
-        consoleLogAppender.log({
-            timestamp: utils.getCurrentDate(), loggerLabel: 'LoggerFactoryBuilder', logLevel: LogLevel.Warn, message: warnMessage
-        });
-        return createLoggerFactory([ consoleLogAppender ]);
+        return createLoggerFactory(logAppenders);
     }
 });
 
-export const loggerFactoryBuilder = createFactoryBuilder();
+export const createLoggerFactoryBuilder = (): LoggerFactoryBuilder => createFactoryBuilder({});

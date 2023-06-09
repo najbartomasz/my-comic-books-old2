@@ -1,3 +1,4 @@
+import type { LogEntryError } from './log-entry-error.model';
 import type { LogLevel } from './log-level';
 
 export interface LogEntry {
@@ -5,5 +6,5 @@ export interface LogEntry {
     loggerLabel: string;
     logLevel: LogLevel;
     message: string;
-    error?: Error;
+    error?: LogEntryError;
 }

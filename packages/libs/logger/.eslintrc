@@ -1,4 +1,4 @@
 {
-    "extends": "../../../configs/eslint/node.eslintrc",
+    "extends": ["../../../configs/eslint/node.eslintrc", "../../../configs/eslint/browser.eslintrc"],
     "parser": "@typescript-eslint/parser"
 }

@@ -11,3 +11,6 @@ dist/
 
 # Monorepo
 lerna-debug.log
+
+# Build
+.bin/
