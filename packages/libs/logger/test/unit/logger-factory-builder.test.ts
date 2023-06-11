@@ -8,7 +8,6 @@ import { createLoggerFactoryBuilder } from '../../src/logger-factory-builder';
 import * as consoleLogAppenderModule from '../../src/log-appenders/console-log-appender';
 import * as httpLogAppenderModule from '../../src/log-appenders/http-log-appender';
 import * as loggerFactoryModule from '../../src/logger-factory';
-import * as printableLogEntryModule from '../../src/log-appenders/log/printable-log-entry';
 
 describe('logger-factory-builder', () => {
     let loggerFactoryBuilder: LoggerFactoryBuilder;
@@ -28,7 +27,6 @@ describe('logger-factory-builder', () => {
         const consoleLogAppenderMock: LogAppender = { log: jest.fn() };
         const createConsoleLogAppenderSpy = jest.spyOn(consoleLogAppenderModule, 'createConsoleLogAppender')
             .mockReturnValueOnce(consoleLogAppenderMock);
-        const createPrintableLogEntrySpy = jest.spyOn(printableLogEntryModule, 'createPrintableLogEntry');
 
         // When
         const builtLoggerFactory = loggerFactoryBuilder.build();
@@ -38,7 +36,7 @@ describe('logger-factory-builder', () => {
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
         expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
-        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty, createPrintableLogEntrySpy);
+        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty);
     });
 
     test('builds logger factory with added pretty console logger', () => {
@@ -46,7 +44,6 @@ describe('logger-factory-builder', () => {
         const consoleLogAppenderMock: LogAppender = { log: jest.fn() };
         const createConsoleLogAppenderSpy = jest.spyOn(consoleLogAppenderModule, 'createConsoleLogAppender')
             .mockReturnValueOnce(consoleLogAppenderMock);
-        const createPrintableLogEntrySpy = jest.spyOn(printableLogEntryModule, 'createPrintableLogEntry');
 
         // When
         const builtLoggerFactory = loggerFactoryBuilder
@@ -58,7 +55,7 @@ describe('logger-factory-builder', () => {
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
         expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
-        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty, createPrintableLogEntrySpy);
+        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty);
     });
 
     test('builds logger factory with added json console logger', () => {
@@ -66,7 +63,6 @@ describe('logger-factory-builder', () => {
         const consoleLogAppenderMock: LogAppender = { log: jest.fn() };
         const createConsoleLogAppenderSpy = jest.spyOn(consoleLogAppenderModule, 'createConsoleLogAppender')
             .mockReturnValueOnce(consoleLogAppenderMock);
-        const createPrintableLogEntrySpy = jest.spyOn(printableLogEntryModule, 'createPrintableLogEntry');
 
         // When
         const builtLoggerFactory = loggerFactoryBuilder
@@ -78,7 +74,7 @@ describe('logger-factory-builder', () => {
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
         expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
-        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Json, createPrintableLogEntrySpy);
+        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Json);
     });
 
     test('builds logger factory with the last added console logger when multiple console loggers were added', () => {
@@ -86,7 +82,6 @@ describe('logger-factory-builder', () => {
         const consoleLogAppenderMock: LogAppender = { log: jest.fn() };
         const createConsoleLogAppenderSpy = jest.spyOn(consoleLogAppenderModule, 'createConsoleLogAppender')
             .mockReturnValueOnce(consoleLogAppenderMock);
-        const createPrintableLogEntrySpy = jest.spyOn(printableLogEntryModule, 'createPrintableLogEntry');
 
         // When
         const builtLoggerFactory = loggerFactoryBuilder
@@ -99,7 +94,7 @@ describe('logger-factory-builder', () => {
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
         expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
-        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty, createPrintableLogEntrySpy);
+        expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty);
     });
 
     test('builds logger factory with added http logger containing default values', () => {

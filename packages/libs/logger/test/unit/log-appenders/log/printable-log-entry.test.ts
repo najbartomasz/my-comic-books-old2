@@ -1,18 +1,22 @@
-import type { LogEntry } from '../../../../src/log-appenders/log/log-entry.model';
-import type { LogEntryError } from '../../../../src/log-appenders/log/log-entry-error.model';
 import type { PrintableLogEntry } from '../../../../src/log-appenders/log/printable-log-entry.model';
 
-import { LogLevel } from '../../../../src/log-appenders/log/log-level';
 import { createPrintableLogEntry } from '../../../../src/log-appenders/log/printable-log-entry';
+
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
+
 
 describe('printable-log-entry', () => {
     const timestamp = new Date('1987-08-20T15:30:00');
     const loggerLabel = 'TestLogger';
     const message = 'Test message.';
 
+    beforeEach(() => {
+        jest.spyOn(global, 'Date').mockReturnValueOnce(timestamp);
+    });
+
     test('creates info log entry', () => {
         // Given
-        const logEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Info, message };
+        const logEntry = createInfoLogEntry(loggerLabel, message);
         const expectedPrintableLogEntry: PrintableLogEntry = { timestamp: timestamp.toJSON(), loggerLabel, logLevel: 'INFO', message };
 
         // When
@@ -24,7 +28,7 @@ describe('printable-log-entry', () => {
 
     test('creates info warn entry', () => {
         // Given
-        const logEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Warn, message };
+        const logEntry = createWarnLogEntry(loggerLabel, message);
         const expectedPrintableLogEntry: PrintableLogEntry = { timestamp: timestamp.toJSON(), loggerLabel, logLevel: 'WARN', message };
 
         // When
@@ -36,7 +40,7 @@ describe('printable-log-entry', () => {
 
     test('creates info log entry without error', () => {
         // Given
-        const logEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Error, message };
+        const logEntry = createErrorLogEntry(loggerLabel, message);
         const expectedPrintableLogEntry: PrintableLogEntry = { timestamp: timestamp.toJSON(), loggerLabel, logLevel: 'ERROR', message };
 
         // When
@@ -48,8 +52,10 @@ describe('printable-log-entry', () => {
 
     test('creates info log entry with error', () => {
         // Given
-        const logEntryError: LogEntryError = { name: 'TestError', message: 'Test error message.', stack: 'Test error stack' };
-        const logEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Error, message, error: logEntryError };
+        const error = new Error('Test error message.');
+        error.stack = 'Test error stack';
+        const logEntry = createErrorLogEntry(loggerLabel, message, error);
+        const logEntryError = { name: error.name, message: error.message, stack: error.stack };
         const expectedPrintableLogEntry: PrintableLogEntry = {
             timestamp: timestamp.toJSON(), loggerLabel, logLevel: 'ERROR', message, error: logEntryError
         };

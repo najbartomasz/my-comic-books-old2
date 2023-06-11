@@ -1,4 +1,4 @@
-import type { LogEntry } from './log/log-entry.model';
+import type { LogEntry } from 'log-entry';
 import type { LogEntryCircularBuffer } from './log-entry-circular-buffer.model';
 
 const megabyte = 10438576;

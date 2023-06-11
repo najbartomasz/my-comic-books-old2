@@ -1,7 +1,7 @@
-import type { LogEntry } from './log-entry.model';
+import type { LogEntry } from 'log-entry';
 import type { PrintableLogEntry } from './printable-log-entry.model';
 
-import { LogLevel } from './log-level';
+import { LogLevel } from 'log-entry';
 
 const printableLogLevel = Object.freeze({
     [LogLevel.Info]: 'INFO',

@@ -1,4 +1,3 @@
-export type { LogEntry } from './log-appenders/log/log-entry.model';
 export type { Logger } from './logger.model';
 export type { LoggerFactory } from './logger-factory.model';
 export type { LoggerFactoryBuilder } from './logger-factory-builder.model';

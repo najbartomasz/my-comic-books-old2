@@ -1,8 +1,8 @@
 import type { LogAppender } from './log-appenders/log-appender.model';
-import type { LogEntry } from './log-appenders/log/log-entry.model';
+import type { LogEntry } from 'log-entry';
 import type { Logger } from './logger.model';
 
-import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from './log-appenders/log/log-entry';
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
 
 const setLogAppenders = (logAppenders: LogAppender[]): ((logEntry: LogEntry) => void) =>
     (logEntry: LogEntry): void => {

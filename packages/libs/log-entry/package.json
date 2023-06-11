@@ -1,7 +1,7 @@
 {
-    "name": "logger",
+    "name": "log-entry",
     "version": "1.0.0",
-    "description": "Provides logging functionality.",
+    "description": "Provides log-entry definitions common for front-end and back-end components.",
     "author": "Tomasz Najbar <najbartomasz@gmail.com>",
     "license": "UNLICENSED",
     "main": "dist/index.js",
@@ -12,13 +12,10 @@
         "build": "tsc --project src/tsconfig.json",
         "clean:all": "npm run clean:build && rimraf coverage/ && rimraf node_modules/",
         "clean:build": "rimraf logger-*.tgz && rimraf dist/",
-        "pack": "npm run clean:build && npm run build && npm pack && mv logger-*.tgz ../../../.bin/",
+        "pack": "npm run clean:build && npm run build && npm pack && mv log-entry-*.tgz ../../../.bin/",
         "lint": "eslint . --ext .ts",
         "test": "jest --coverage test",
         "test:watch": "jest --coverage --watch test"
-    },
-    "dependencies": {
-        "log-entry": "file:../../../.bin/log-entry-1.0.0.tgz"
     },
     "devDependencies": {
         "@types/jest": "29.5.2",
@@ -33,5 +30,8 @@
         "jest-when": "3.5.2",
         "ts-jest": "29.1.0",
         "typescript": "5.0.4"
+    },
+    "dependencies": {
+        "log-entry": "file:../../../.bin/log-entry-1.0.0.tgz"
     }
 }

@@ -7,7 +7,6 @@ import { LogFormat } from './log-appenders/log/log-format';
 import { createConsoleLogAppender } from './log-appenders/console-log-appender';
 import { createHttpLogAppender } from './log-appenders/http-log-appender';
 import { createLoggerFactory } from './logger-factory';
-import { createPrintableLogEntry } from './log-appenders/log/printable-log-entry';
 
 const createFactoryBuilder = (options: LoggerOptions): LoggerFactoryBuilder => ({
     addPrettyConsoleLogger: (): LoggerFactoryBuilder =>
@@ -18,7 +17,7 @@ const createFactoryBuilder = (options: LoggerOptions): LoggerFactoryBuilder => (
         createFactoryBuilder({ ...options, httpServer: { url, maxLogBufferSizeInMb, sendRetryTimer } }),
     build: (): LoggerFactory => {
         const logAppenders: LogAppender[] = [
-            createConsoleLogAppender(options.logFormat ?? LogFormat.Pretty, createPrintableLogEntry)
+            createConsoleLogAppender(options.logFormat ?? LogFormat.Pretty)
         ];
         const { httpServer } = options;
         if (httpServer) {

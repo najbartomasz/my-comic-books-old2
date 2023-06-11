@@ -1,10 +1,9 @@
 import type { LogAppender } from '../../src/log-appenders/log-appender.model';
-import type { LogEntry } from '../../src/log-appenders/log/log-entry.model';
-import type { LogEntryError } from '../../src/log-appenders/log/log-entry-error.model';
 import type { Logger } from '../../src/logger.model';
 
-import { LogLevel } from '../../src/log-appenders/log/log-level';
 import { createLogger } from '../../src/logger';
+
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
 
 describe('logger', () => {
     const loggerLabel = 'TestLogger';
@@ -17,7 +16,7 @@ describe('logger', () => {
     let logAppender2Mock: LogAppender;
 
     beforeEach(() => {
-        jest.spyOn(global, 'Date').mockReturnValueOnce(timestamp);
+        jest.spyOn(global, 'Date').mockReturnValue(timestamp);
         logAppender1Mock = { log: jest.fn() };
         logAppender2Mock = { log: jest.fn() };
 
@@ -27,7 +26,7 @@ describe('logger', () => {
 
     test('logs info message', () => {
         // Given
-        const expectedLogEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Info, message };
+        const expectedLogEntry = createInfoLogEntry(loggerLabel, message);
 
         // When
         logger.info(message);
@@ -41,7 +40,7 @@ describe('logger', () => {
 
     test('logs warn message', () => {
         // Given
-        const expectedLogEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Warn, message };
+        const expectedLogEntry = createWarnLogEntry(loggerLabel, message);
 
         // When
         logger.warn(message);
@@ -55,7 +54,7 @@ describe('logger', () => {
 
     test('logs error message without defined error', () => {
         // Given
-        const expectedLogEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Error, message };
+        const expectedLogEntry = createErrorLogEntry(loggerLabel, message);
 
         // When
         logger.error(message);
@@ -71,8 +70,7 @@ describe('logger', () => {
         // Given
         const error = new Error('Test error message.');
         error.stack = 'Test error stack';
-        const expectedLogEntryError: LogEntryError = { name: error.name, message: error.message, stack: error.stack };
-        const expectedLogEntry: LogEntry = { timestamp, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError };
+        const expectedLogEntry = createErrorLogEntry(loggerLabel, message, error);
 
         // When
         logger.error(message, error);

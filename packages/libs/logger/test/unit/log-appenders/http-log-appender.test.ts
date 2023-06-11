@@ -1,15 +1,15 @@
 import type { LogAppender } from '../../../src/log-appenders/log-appender.model';
-import type { LogEntry } from '../../../src/log-appenders/log/log-entry.model';
-import type { LogEntryError } from '../../../src/log-appenders/log/log-entry-error.model';
 
-import { LogLevel } from '../../../src/log-appenders/log/log-level';
 import { createHttpLogAppender } from '../../../src/log-appenders/http-log-appender';
+
+import { createErrorLogEntry, createInfoLogEntry } from 'log-entry';
 
 describe('http-log-appender', () => {
     const url = 'http://localhost:3000/v1/log';
     const sendRetryTimer = 100;
     const headers = { 'Content-Type': 'application/json' }; // eslint-disable-line @typescript-eslint/naming-convention
-
+    const loggerLabel = 'TestLogger';
+    const message = 'Test message.';
 
     let httpLogAppender: LogAppender;
 
@@ -24,7 +24,7 @@ describe('http-log-appender', () => {
 
     test('posts log', () => {
         // Given
-        const logEntry = { timestamp: new Date(), loggerLabel: 'TestLogger', logLevel: LogLevel.Info, message: 'Test message.' };
+        const logEntry = createInfoLogEntry(loggerLabel, message);
         fetchSpy.mockResolvedValueOnce({});
 
         // When
@@ -39,15 +39,12 @@ describe('http-log-appender', () => {
 
     test('adds error log entry and retries posting log when previous attempt failed', async () => {
         // Given
-        const logEntry: LogEntry = { timestamp: new Date(), loggerLabel: 'TestLogger', logLevel: LogLevel.Info, message: 'Test message.' };
+        const logEntry = createInfoLogEntry(loggerLabel, message);
         const error = new Error('Test error.');
         error.stack = 'Test error stack';
-        const logEntryError: LogEntryError = { name: error.name, message: error.message, stack: error.stack };
         const errorTime = new Date();
-        jest.spyOn(global, 'Date').mockReturnValueOnce(errorTime);
-        const expectedErrorLogEntry: LogEntry = {
-            timestamp: errorTime, loggerLabel: 'HttpLogger', logLevel: LogLevel.Error, message: 'Failed to post logs.', error: logEntryError
-        };
+        jest.spyOn(global, 'Date').mockReturnValue(errorTime);
+        const expectedErrorLogEntry = createErrorLogEntry('HttpLogger', 'Failed to post logs.', error);
         fetchSpy
             .mockRejectedValueOnce(error)
             .mockResolvedValueOnce({});
@@ -66,12 +63,11 @@ describe('http-log-appender', () => {
         );
     });
 
-
     test('posts logs that occured while waiting for previous post response', async () => {
         // Given
-        const logEntry1 = { timestamp: new Date(), loggerLabel: 'TestLogger', logLevel: LogLevel.Info, message: 'Test message 1.' };
-        const logEntry2 = { timestamp: new Date(), loggerLabel: 'TestLogger', logLevel: LogLevel.Warn, message: 'Test message 2.' };
-        const logEntry3 = { timestamp: new Date(), loggerLabel: 'TestLogger', logLevel: LogLevel.Info, message: 'Test message 3.' };
+        const logEntry1 = createInfoLogEntry(loggerLabel, 'Test message 1.');
+        const logEntry2 = createErrorLogEntry(loggerLabel, 'Test message 2.');
+        const logEntry3 = createInfoLogEntry(loggerLabel, 'Test message 3.');
         fetchSpy
             .mockResolvedValueOnce({})
             .mockResolvedValueOnce({});
