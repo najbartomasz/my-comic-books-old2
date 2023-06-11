@@ -11,17 +11,17 @@ const setLogAppenders = (logAppenders: LogAppender[]): ((logEntry: LogEntry) => 
         });
     };
 
-export const createLogger = (label: string, logAppenders: LogAppender[]): Logger => {
+export const createLogger = (applicationName: string, label: string, logAppenders: LogAppender[]): Logger => {
     const log = setLogAppenders(logAppenders);
     return {
         info: (message: string): void => {
-            log(createInfoLogEntry(label, message));
+            log(createInfoLogEntry(applicationName, label, message));
         },
         warn: (message: string): void => {
-            log(createWarnLogEntry(label, message));
+            log(createWarnLogEntry(applicationName, label, message));
         },
         error: (message: string, error?: unknown): void => {
-            log(createErrorLogEntry(label, message, error));
+            log(createErrorLogEntry(applicationName, label, message, error));
         }
     };
 };

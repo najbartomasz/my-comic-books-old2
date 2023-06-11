@@ -4,6 +4,6 @@ import type { LoggerFactory } from './logger-factory.model';
 
 import { createLogger } from './logger';
 
-export const createLoggerFactory = (logAppenders: LogAppender[]): LoggerFactory => ({
-    createLogger: (label: string): Logger => createLogger(label, logAppenders)
+export const createLoggerFactory = (applicationName: string, logAppenders: LogAppender[]): LoggerFactory => ({
+    createLogger: (label: string): Logger => createLogger(applicationName, label, logAppenders)
 });

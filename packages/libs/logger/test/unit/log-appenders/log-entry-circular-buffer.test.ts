@@ -4,6 +4,7 @@ import { createLogEntryCircularBuffer } from '../../../src/log-appenders/log-ent
 import { createInfoLogEntry } from 'log-entry';
 
 describe('log-entry-circular-logEntryCircularBuffer', () => {
+    const applicationName = 'Test';
     const loggerLabel = 'TestLogger';
     const megabyte = 10438576;
 
@@ -17,9 +18,9 @@ describe('log-entry-circular-logEntryCircularBuffer', () => {
 
     test('adds log entry at the end', () => {
         // Given
-        const logEntry1 = createInfoLogEntry(loggerLabel, 'Test message 1.');
-        const logEntry2 = createInfoLogEntry(loggerLabel, 'Test message 2.');
-        const logEntry3 = createInfoLogEntry(loggerLabel, 'Test message 3.');
+        const logEntry1 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 1.');
+        const logEntry2 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 2.');
+        const logEntry3 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 3.');
 
         // When
         const buffer = createLogEntryCircularBuffer(1);
@@ -33,9 +34,9 @@ describe('log-entry-circular-logEntryCircularBuffer', () => {
 
     test('removes given log entries', () => {
         // Given
-        const logEntry1 = createInfoLogEntry(loggerLabel, 'Test message 1.');
-        const logEntry2 = createInfoLogEntry(loggerLabel, 'Test message 2.');
-        const logEntry3 = createInfoLogEntry(loggerLabel, 'Test message 3.');
+        const logEntry1 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 1.');
+        const logEntry2 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 2.');
+        const logEntry3 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 3.');
         const buffer = createLogEntryCircularBuffer(1);
         buffer.add(logEntry1);
         buffer.add(logEntry2);
@@ -50,15 +51,15 @@ describe('log-entry-circular-logEntryCircularBuffer', () => {
 
     test('removes oldest log entries when buffer size is exceeded', () => {
         // Given
-        const threeLogEntriesSize = (JSON.stringify(createInfoLogEntry(loggerLabel, 'Test message N.')).length * 3) / megabyte;
-        const logEntry1 = createInfoLogEntry(loggerLabel, 'Test message 1.');
-        const logEntry2 = createInfoLogEntry(loggerLabel, 'Test message 2.');
-        const logEntry3 = createInfoLogEntry(loggerLabel, 'Test message 3.');
-        const logEntry4 = createInfoLogEntry(loggerLabel, 'Test message 5.');
-        const logEntry5 = createInfoLogEntry(loggerLabel, 'Test message 5.');
+        const threeLogEntriesSize = (JSON.stringify(createInfoLogEntry(applicationName, loggerLabel, 'Test message N.')).length * 3);
+        const logEntry1 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 1.');
+        const logEntry2 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 2.');
+        const logEntry3 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 3.');
+        const logEntry4 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 5.');
+        const logEntry5 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 5.');
         const createVeryLongMessage = (messageNumber: number): string => `Very ${'very '.repeat(10)} long test message ${messageNumber}.`;
-        const logEntry6 = createInfoLogEntry(loggerLabel, createVeryLongMessage(6));
-        const buffer = createLogEntryCircularBuffer(threeLogEntriesSize);
+        const logEntry6 = createInfoLogEntry(applicationName, loggerLabel, createVeryLongMessage(6));
+        const buffer = createLogEntryCircularBuffer(threeLogEntriesSize / megabyte);
         buffer.add(logEntry1);
         buffer.add(logEntry2);
         buffer.add(logEntry3);
@@ -74,13 +75,13 @@ describe('log-entry-circular-logEntryCircularBuffer', () => {
 
     test('skips log entries which exceeds buffer size', () => {
         // Given
-        const twoLogEntriesSize = (JSON.stringify(createInfoLogEntry(loggerLabel, 'Test message N.')).length * 2) / megabyte;
-        const logEntry1 = createInfoLogEntry(loggerLabel, 'Test message 1.');
-        const createVeryLongMessage = (messageNumber: number): string => `Very ${'very '.repeat(20)} long test message ${messageNumber}.`;
-        const logEntry2 = createInfoLogEntry(loggerLabel, createVeryLongMessage(2));
-        const logEntry3 = createInfoLogEntry(loggerLabel, createVeryLongMessage(3));
-        const logEntry4 = createInfoLogEntry(loggerLabel, 'Test message 4.');
-        const buffer = createLogEntryCircularBuffer(twoLogEntriesSize);
+        const twoLogEntriesSize = (JSON.stringify(createInfoLogEntry(applicationName, loggerLabel, 'Test message N.')).length * 2);
+        const logEntry1 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 1.');
+        const createVeryLongMessage = (messageNumber: number): string => `Very ${'very '.repeat(25)} long test message ${messageNumber}.`;
+        const logEntry2 = createInfoLogEntry(applicationName, loggerLabel, createVeryLongMessage(2));
+        const logEntry3 = createInfoLogEntry(applicationName, loggerLabel, createVeryLongMessage(3));
+        const logEntry4 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 4.');
+        const buffer = createLogEntryCircularBuffer(twoLogEntriesSize / megabyte);
         buffer.add(logEntry1);
 
         // When

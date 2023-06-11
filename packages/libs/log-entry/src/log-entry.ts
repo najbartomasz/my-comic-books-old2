@@ -11,16 +11,16 @@ const createLogEntryError = (error: unknown): LogEntryError => {
     return { name: 'UnknownErrorType', message: JSON.stringify(error) };
 };
 
-const createLogEntry = (logLevel: LogLevel, loggerLabel: string, message: string, error?: unknown): LogEntry => {
-    const logEntry: LogEntry = { timestamp: new Date(), loggerLabel, logLevel, message };
+const createLogEntry = (logLevel: LogLevel, applicationName: string, loggerLabel: string, message: string, error?: unknown): LogEntry => {
+    const logEntry: LogEntry = { timestamp: new Date(), applicationName, loggerLabel, logLevel, message };
     return (error === undefined) ? logEntry : { ...logEntry, error: createLogEntryError(error) };
 };
 
-export const createInfoLogEntry = (loggerLabel: string, message: string): LogEntry =>
-    createLogEntry(LogLevel.Info, loggerLabel, message);
+export const createInfoLogEntry = (applicationName: string, loggerLabel: string, message: string): LogEntry =>
+    createLogEntry(LogLevel.Info, applicationName, loggerLabel, message);
 
-export const createWarnLogEntry = (loggerLabel: string, message: string): LogEntry =>
-    createLogEntry(LogLevel.Warn, loggerLabel, message);
+export const createWarnLogEntry = (applicationName: string, loggerLabel: string, message: string): LogEntry =>
+    createLogEntry(LogLevel.Warn, applicationName, loggerLabel, message);
 
-export const createErrorLogEntry = (loggerLabel: string, message: string, error?: unknown): LogEntry =>
-    createLogEntry(LogLevel.Error, loggerLabel, message, error);
+export const createErrorLogEntry = (applicationName: string, loggerLabel: string, message: string, error?: unknown): LogEntry =>
+    createLogEntry(LogLevel.Error, applicationName, loggerLabel, message, error);

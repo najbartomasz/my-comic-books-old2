@@ -9,9 +9,10 @@ const printableLogLevel = Object.freeze({
     [LogLevel.Error]: 'ERROR'
 });
 
-export const createPrintableLogEntry = ({ timestamp, loggerLabel, logLevel, message, error }: LogEntry): Readonly<PrintableLogEntry> => {
+export const createPrintableLogEntry = (logEntry: LogEntry): PrintableLogEntry => {
+    const { timestamp, applicationName, loggerLabel, logLevel, message, error } = logEntry;
     const printableLogEntry: PrintableLogEntry = {
-        timestamp: timestamp.toJSON(), loggerLabel, logLevel: printableLogLevel[logLevel], message
+        timestamp: timestamp.toJSON(), applicationName, loggerLabel, logLevel: printableLogLevel[logLevel], message
     };
     return (error) ? { ...printableLogEntry, error } : { ...printableLogEntry };
 };

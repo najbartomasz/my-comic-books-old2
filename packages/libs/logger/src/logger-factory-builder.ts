@@ -8,24 +8,24 @@ import { createConsoleLogAppender } from './log-appenders/console-log-appender';
 import { createHttpLogAppender } from './log-appenders/http-log-appender';
 import { createLoggerFactory } from './logger-factory';
 
-const createFactoryBuilder = (options: LoggerOptions): LoggerFactoryBuilder => ({
+const createFactoryBuilder = (applicationName: string, loggerOptions: LoggerOptions): LoggerFactoryBuilder => ({
     addPrettyConsoleLogger: (): LoggerFactoryBuilder =>
-        createFactoryBuilder({ ...options, logFormat: LogFormat.Pretty }),
+        createFactoryBuilder(applicationName, { ...loggerOptions, logFormat: LogFormat.Pretty }),
     addJsonConsoleLogger: (): LoggerFactoryBuilder =>
-        createFactoryBuilder({ ...options, logFormat: LogFormat.Json }),
+        createFactoryBuilder(applicationName, { ...loggerOptions, logFormat: LogFormat.Json }),
     addHttpLogger: (url: string, maxLogBufferSizeInMb = 1, sendRetryTimer = 100): LoggerFactoryBuilder =>
-        createFactoryBuilder({ ...options, httpServer: { url, maxLogBufferSizeInMb, sendRetryTimer } }),
+        createFactoryBuilder(applicationName, { ...loggerOptions, httpServer: { url, maxLogBufferSizeInMb, sendRetryTimer } }),
     build: (): LoggerFactory => {
         const logAppenders: LogAppender[] = [
-            createConsoleLogAppender(options.logFormat ?? LogFormat.Pretty)
+            createConsoleLogAppender(loggerOptions.logFormat ?? LogFormat.Pretty)
         ];
-        const { httpServer } = options;
+        const { httpServer } = loggerOptions;
         if (httpServer) {
             const { url, maxLogBufferSizeInMb, sendRetryTimer } = httpServer;
-            logAppenders.push(createHttpLogAppender(url, maxLogBufferSizeInMb, sendRetryTimer));
+            logAppenders.push(createHttpLogAppender(applicationName, url, maxLogBufferSizeInMb, sendRetryTimer));
         }
-        return createLoggerFactory(logAppenders);
+        return createLoggerFactory(applicationName, logAppenders);
     }
 });
 
-export const createLoggerFactoryBuilder = (): LoggerFactoryBuilder => createFactoryBuilder({});
+export const createLoggerFactoryBuilder = (applicationName: string): LoggerFactoryBuilder => createFactoryBuilder(applicationName, {});

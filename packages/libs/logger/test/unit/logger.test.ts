@@ -6,6 +6,7 @@ import { createLogger } from '../../src/logger';
 import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
 
 describe('logger', () => {
+    const applicationName = 'Test';
     const loggerLabel = 'TestLogger';
     const message = 'Test message.';
     const timestamp = new Date('1987-08-20T15:30:00');
@@ -20,13 +21,13 @@ describe('logger', () => {
         logAppender1Mock = { log: jest.fn() };
         logAppender2Mock = { log: jest.fn() };
 
-        logger = createLogger(loggerLabel, [logAppender1Mock, logAppender2Mock]);
+        logger = createLogger(applicationName, loggerLabel, [logAppender1Mock, logAppender2Mock]);
     });
 
 
     test('logs info message', () => {
         // Given
-        const expectedLogEntry = createInfoLogEntry(loggerLabel, message);
+        const expectedLogEntry = createInfoLogEntry(applicationName, loggerLabel, message);
 
         // When
         logger.info(message);
@@ -40,7 +41,7 @@ describe('logger', () => {
 
     test('logs warn message', () => {
         // Given
-        const expectedLogEntry = createWarnLogEntry(loggerLabel, message);
+        const expectedLogEntry = createWarnLogEntry(applicationName, loggerLabel, message);
 
         // When
         logger.warn(message);
@@ -54,7 +55,7 @@ describe('logger', () => {
 
     test('logs error message without defined error', () => {
         // Given
-        const expectedLogEntry = createErrorLogEntry(loggerLabel, message);
+        const expectedLogEntry = createErrorLogEntry(applicationName, loggerLabel, message);
 
         // When
         logger.error(message);
@@ -70,7 +71,7 @@ describe('logger', () => {
         // Given
         const error = new Error('Test error message.');
         error.stack = 'Test error stack';
-        const expectedLogEntry = createErrorLogEntry(loggerLabel, message, error);
+        const expectedLogEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
 
         // When
         logger.error(message, error);

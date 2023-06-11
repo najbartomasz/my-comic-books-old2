@@ -5,6 +5,7 @@ import { createHttpLogAppender } from '../../../src/log-appenders/http-log-appen
 import { createErrorLogEntry, createInfoLogEntry } from 'log-entry';
 
 describe('http-log-appender', () => {
+    const applicationName = 'Test';
     const url = 'http://localhost:3000/v1/log';
     const sendRetryTimer = 100;
     const headers = { 'Content-Type': 'application/json' }; // eslint-disable-line @typescript-eslint/naming-convention
@@ -17,14 +18,14 @@ describe('http-log-appender', () => {
 
     beforeEach(() => {
         const maxLogBufferSizeInMb = 1;
-        httpLogAppender = createHttpLogAppender(url, maxLogBufferSizeInMb, sendRetryTimer);
+        httpLogAppender = createHttpLogAppender(applicationName, url, maxLogBufferSizeInMb, sendRetryTimer);
 
         fetchSpy = jest.spyOn(global, 'fetch');
     });
 
     test('posts log', () => {
         // Given
-        const logEntry = createInfoLogEntry(loggerLabel, message);
+        const logEntry = createInfoLogEntry(applicationName, loggerLabel, message);
         fetchSpy.mockResolvedValueOnce({});
 
         // When
@@ -39,12 +40,12 @@ describe('http-log-appender', () => {
 
     test('adds error log entry and retries posting log when previous attempt failed', async () => {
         // Given
-        const logEntry = createInfoLogEntry(loggerLabel, message);
+        const logEntry = createInfoLogEntry(applicationName, loggerLabel, message);
         const error = new Error('Test error.');
         error.stack = 'Test error stack';
         const errorTime = new Date();
         jest.spyOn(global, 'Date').mockReturnValue(errorTime);
-        const expectedErrorLogEntry = createErrorLogEntry('HttpLogger', 'Failed to post logs.', error);
+        const expectedErrorLogEntry = createErrorLogEntry(applicationName, 'HttpLogger', 'Failed to post logs.', error);
         fetchSpy
             .mockRejectedValueOnce(error)
             .mockResolvedValueOnce({});
@@ -65,9 +66,9 @@ describe('http-log-appender', () => {
 
     test('posts logs that occured while waiting for previous post response', async () => {
         // Given
-        const logEntry1 = createInfoLogEntry(loggerLabel, 'Test message 1.');
-        const logEntry2 = createErrorLogEntry(loggerLabel, 'Test message 2.');
-        const logEntry3 = createInfoLogEntry(loggerLabel, 'Test message 3.');
+        const logEntry1 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 1.');
+        const logEntry2 = createErrorLogEntry(applicationName, loggerLabel, 'Test message 2.');
+        const logEntry3 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 3.');
         fetchSpy
             .mockResolvedValueOnce({})
             .mockResolvedValueOnce({});

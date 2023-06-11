@@ -6,7 +6,7 @@ import { createLogEntryCircularBuffer } from './log-entry-circular-buffer';
 import { createErrorLogEntry } from 'log-entry';
 
 export const createHttpLogAppender = (
-    url: string, maxLogBufferSizeInMb: number, sendRetryTimer: number
+    applicationName: string, url: string, maxLogBufferSizeInMb: number, sendRetryTimer: number
 ): LogAppender => {
     const logBuffer = createLogEntryCircularBuffer(maxLogBufferSizeInMb);
 
@@ -20,7 +20,7 @@ export const createHttpLogAppender = (
                 }
             })
             .catch((error: Error): void => {
-                logBuffer.add(createErrorLogEntry('HttpLogger', 'Failed to post logs.', error));
+                logBuffer.add(createErrorLogEntry(applicationName, 'HttpLogger', 'Failed to post logs.', error));
                 setTimeout((): void => {
                     postLogs(logBuffer.logEntries);
                 }, sendRetryTimer);

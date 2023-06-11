@@ -10,13 +10,15 @@ import * as httpLogAppenderModule from '../../src/log-appenders/http-log-appende
 import * as loggerFactoryModule from '../../src/logger-factory';
 
 describe('logger-factory-builder', () => {
+    const applicationName = 'Test';
+
     let loggerFactoryBuilder: LoggerFactoryBuilder;
 
     let loggerFactoryMock: LoggerFactory;
     let createLoggerFactorySpy: jest.SpyInstance;
 
     beforeEach(() => {
-        loggerFactoryBuilder = createLoggerFactoryBuilder();
+        loggerFactoryBuilder = createLoggerFactoryBuilder(applicationName);
 
         loggerFactoryMock = { createLogger: jest.fn() };
         createLoggerFactorySpy = jest.spyOn(loggerFactoryModule, 'createLoggerFactory').mockReturnValueOnce(loggerFactoryMock);
@@ -34,7 +36,7 @@ describe('logger-factory-builder', () => {
         // Then
         expect(builtLoggerFactory).toStrictEqual(loggerFactoryMock);
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
+        expect(createLoggerFactorySpy).toHaveBeenCalledWith(applicationName, [consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty);
     });
@@ -53,7 +55,7 @@ describe('logger-factory-builder', () => {
         // Then
         expect(builtLoggerFactory).toStrictEqual(loggerFactoryMock);
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
+        expect(createLoggerFactorySpy).toHaveBeenCalledWith(applicationName, [consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty);
     });
@@ -72,7 +74,7 @@ describe('logger-factory-builder', () => {
         // Then
         expect(builtLoggerFactory).toStrictEqual(loggerFactoryMock);
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
+        expect(createLoggerFactorySpy).toHaveBeenCalledWith(applicationName, [consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Json);
     });
@@ -92,7 +94,7 @@ describe('logger-factory-builder', () => {
         // Then
         expect(builtLoggerFactory).toStrictEqual(loggerFactoryMock);
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerFactorySpy).toHaveBeenCalledWith([consoleLogAppenderMock]);
+        expect(createLoggerFactorySpy).toHaveBeenCalledWith(applicationName, [consoleLogAppenderMock]);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledTimes(1);
         expect(createConsoleLogAppenderSpy).toHaveBeenCalledWith(LogFormat.Pretty);
     });
@@ -114,9 +116,9 @@ describe('logger-factory-builder', () => {
         // Then
         expect(builtLoggerFactory).toStrictEqual(loggerFactoryMock);
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerFactorySpy).toHaveBeenCalledWith(expect.arrayContaining([httpLogAppenderMock]));
+        expect(createLoggerFactorySpy).toHaveBeenCalledWith(applicationName, expect.arrayContaining([httpLogAppenderMock]));
         expect(createHttpLogAppenderSpy).toHaveBeenCalledTimes(1);
-        expect(createHttpLogAppenderSpy).toHaveBeenCalledWith(url, defaultMaxLogBufferSizeInMb, defaultSendRetryTimer);
+        expect(createHttpLogAppenderSpy).toHaveBeenCalledWith(applicationName, url, defaultMaxLogBufferSizeInMb, defaultSendRetryTimer);
     });
 
     test('builds logger factory with added http logger', () => {
@@ -137,8 +139,8 @@ describe('logger-factory-builder', () => {
         // Then
         expect(builtLoggerFactory).toStrictEqual(loggerFactoryMock);
         expect(createLoggerFactorySpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerFactorySpy).toHaveBeenCalledWith(expect.arrayContaining([httpLogAppenderMock]));
+        expect(createLoggerFactorySpy).toHaveBeenCalledWith(applicationName, expect.arrayContaining([httpLogAppenderMock]));
         expect(createHttpLogAppenderSpy).toHaveBeenCalledTimes(1);
-        expect(createHttpLogAppenderSpy).toHaveBeenCalledWith(url, maxLogBufferSizeInMb, sendRetryTimer);
+        expect(createHttpLogAppenderSpy).toHaveBeenCalledWith(applicationName, url, maxLogBufferSizeInMb, sendRetryTimer);
     });
 });

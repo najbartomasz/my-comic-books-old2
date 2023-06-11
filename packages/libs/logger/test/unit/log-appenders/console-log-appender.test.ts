@@ -8,6 +8,7 @@ import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log
 
 describe('console-log-appender', () => {
     const timestamp = new Date('1987-08-20T15:30:00');
+    const applicationName = 'Test';
     const loggerLabel = 'TestLogger';
     const message = 'Test message.';
 
@@ -25,40 +26,40 @@ describe('console-log-appender', () => {
         test('logs message to console info', () => {
             // Given
             const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementationOnce(jest.fn());
-            const logEntry = createInfoLogEntry(loggerLabel, message);
+            const logEntry = createInfoLogEntry(applicationName, loggerLabel, message);
 
             // When
             consoleLogAppender.log(logEntry);
 
             // Then
             expect(consoleInfoSpy).toHaveBeenCalledTimes(1);
-            expect(consoleInfoSpy).toHaveBeenCalledWith('[1987-08-20T13:30:00.000Z] TestLogger INFO: Test message.');
+            expect(consoleInfoSpy).toHaveBeenCalledWith('[1987-08-20T13:30:00.000Z] Test TestLogger INFO: Test message.');
         });
 
         test('logs message to console warn', () => {
             // Given
             const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementationOnce(jest.fn());
-            const logEntry = createWarnLogEntry(loggerLabel, message);
+            const logEntry = createWarnLogEntry(applicationName, loggerLabel, message);
 
             // When
             consoleLogAppender.log(logEntry);
 
             // Then
             expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-            expect(consoleWarnSpy).toHaveBeenCalledWith('[1987-08-20T13:30:00.000Z] TestLogger WARN: Test message.');
+            expect(consoleWarnSpy).toHaveBeenCalledWith('[1987-08-20T13:30:00.000Z] Test TestLogger WARN: Test message.');
         });
 
         test('logs message to console error', () => {
             // Given
             const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementationOnce(jest.fn());
-            const logEntry = createErrorLogEntry(loggerLabel, message);
+            const logEntry = createErrorLogEntry(applicationName, loggerLabel, message);
 
             // When
             consoleLogAppender.log(logEntry);
 
             // Then
             expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-            expect(consoleErrorSpy).toHaveBeenCalledWith('[1987-08-20T13:30:00.000Z] TestLogger ERROR: Test message.');
+            expect(consoleErrorSpy).toHaveBeenCalledWith('[1987-08-20T13:30:00.000Z] Test TestLogger ERROR: Test message.');
         });
 
         test('logs message with error description to console error', () => {
@@ -66,7 +67,7 @@ describe('console-log-appender', () => {
             const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementationOnce(jest.fn());
             const error = new Error('Test error message.');
             delete error.stack;
-            const logEntry = createErrorLogEntry(loggerLabel, message, error);
+            const logEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
 
             // When
             consoleLogAppender.log(logEntry);
@@ -74,7 +75,7 @@ describe('console-log-appender', () => {
             // Then
             expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
             expect(consoleErrorSpy).toHaveBeenCalledWith(
-                '[1987-08-20T13:30:00.000Z] TestLogger ERROR: Test message.\nCaused by: Error Test error message.'
+                '[1987-08-20T13:30:00.000Z] Test TestLogger ERROR: Test message.\nCaused by: Error Test error message.'
             );
         });
 
@@ -83,7 +84,7 @@ describe('console-log-appender', () => {
             const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementationOnce(jest.fn());
             const error = new Error('Test error message.');
             error.stack = 'Test error stack.';
-            const logEntry = createErrorLogEntry(loggerLabel, message, error);
+            const logEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
 
             // When
             consoleLogAppender.log(logEntry);
@@ -91,7 +92,7 @@ describe('console-log-appender', () => {
             // Then
             expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
             expect(consoleErrorSpy).toHaveBeenCalledWith(
-                '[1987-08-20T13:30:00.000Z] TestLogger ERROR: Test message.\nCaused by: Error Test error message.\nTest error stack.'
+                '[1987-08-20T13:30:00.000Z] Test TestLogger ERROR: Test message.\nCaused by: Error Test error message.\nTest error stack.'
             );
         });
     });
@@ -104,7 +105,7 @@ describe('console-log-appender', () => {
         test('logs message to console info', () => {
             // Given
             const consoleInfoSpy = jest.spyOn(console, 'info').mockImplementationOnce(jest.fn());
-            const logEntry = createInfoLogEntry(loggerLabel, message);
+            const logEntry = createInfoLogEntry(applicationName, loggerLabel, message);
             const expectedPrintableLogEntry: PrintableLogEntry = { ...logEntry, timestamp: logEntry.timestamp.toJSON(), logLevel: 'INFO' };
 
             // When
@@ -118,7 +119,7 @@ describe('console-log-appender', () => {
         test('logs message to console warn', () => {
             // Given
             const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementationOnce(jest.fn());
-            const logEntry = createWarnLogEntry(loggerLabel, message);
+            const logEntry = createWarnLogEntry(applicationName, loggerLabel, message);
             const expectedPrintableLogEntry: PrintableLogEntry = { ...logEntry, timestamp: logEntry.timestamp.toJSON(), logLevel: 'WARN' };
 
             // When
@@ -134,7 +135,7 @@ describe('console-log-appender', () => {
             const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementationOnce(jest.fn());
             const error = new Error('Test error message.');
             error.stack = 'Test error stack.';
-            const logEntry = createErrorLogEntry(loggerLabel, message, error);
+            const logEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
             const logEntryError = { name: error.name, message: error.message, stack: error.stack };
             const expectedPrintableLogEntry: PrintableLogEntry = {
                 ...logEntry, timestamp: logEntry.timestamp.toJSON(), logLevel: 'ERROR', error: logEntryError
