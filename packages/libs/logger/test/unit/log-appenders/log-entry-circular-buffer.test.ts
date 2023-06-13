@@ -1,7 +1,5 @@
-
+import { createInfoLogEntry } from '../../../src/log-appenders/log/log-entry';
 import { createLogEntryCircularBuffer } from '../../../src/log-appenders/log-entry-circular-buffer';
-
-import { createInfoLogEntry } from 'log-entry';
 
 describe('log-entry-circular-logEntryCircularBuffer', () => {
     const appName = 'Test';

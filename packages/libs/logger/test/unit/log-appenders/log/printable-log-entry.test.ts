@@ -1,9 +1,7 @@
 import type { PrintableLogEntry } from '../../../../src/log-appenders/log/printable-log-entry.model';
 
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from '../../../../src/log-appenders/log/log-entry';
 import { createPrintableLogEntry } from '../../../../src/log-appenders/log/printable-log-entry';
-
-import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
-
 
 describe('printable-log-entry', () => {
     const appName = 'Test';

@@ -1,9 +1,8 @@
 import type { LogAppender } from '../../../src/log-appenders/log-appender.model';
 
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from '../../../src/log-appenders/log/log-entry';
 import { LogFormat } from '../../../src/log-appenders/log/log-format';
 import { createConsoleLogAppender } from '../../../src/log-appenders/console-log-appender';
-
-import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
 
 describe('console-log-appender', () => {
     const timestamp = new Date('1987-08-20T15:30:00');

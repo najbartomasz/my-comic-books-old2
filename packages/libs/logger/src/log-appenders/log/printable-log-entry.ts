@@ -1,7 +1,7 @@
-import type { LogEntry } from 'log-entry';
+import type { LogEntry } from './log-entry.model';
 import type { PrintableLogEntry } from './printable-log-entry.model';
 
-import { LogLevel } from 'log-entry';
+import { LogLevel } from './log-level';
 
 const printableLogLevel = Object.freeze({
     [LogLevel.Info]: 'INFO',
@@ -9,10 +9,6 @@ const printableLogLevel = Object.freeze({
     [LogLevel.Error]: 'ERROR'
 });
 
-export const createPrintableLogEntry = (logEntry: LogEntry): PrintableLogEntry => {
-    const { timestamp, appName, loggerLabel, logLevel, message, error } = logEntry;
-    const printableLogEntry: PrintableLogEntry = {
-        timestamp: timestamp.toJSON(), appName, loggerLabel, logLevel: printableLogLevel[logLevel], message
-    };
-    return (error) ? { ...printableLogEntry, error } : { ...printableLogEntry };
-};
+export const createPrintableLogEntry = ({ timestamp, appName, loggerLabel, logLevel, message, error }: LogEntry): PrintableLogEntry => ({
+    timestamp: timestamp.toJSON(), appName, loggerLabel, logLevel: printableLogLevel[logLevel], message, ...error && { error }
+});

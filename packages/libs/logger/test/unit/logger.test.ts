@@ -1,9 +1,8 @@
 import type { LogAppender } from '../../src/log-appenders/log-appender.model';
 import type { Logger } from '../../src/logger.model';
 
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from '../../src/log-appenders/log/log-entry';
 import { createLogger } from '../../src/logger';
-
-import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
 
 describe('logger', () => {
     const appName = 'Test';

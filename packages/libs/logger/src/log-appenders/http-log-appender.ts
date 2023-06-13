@@ -1,9 +1,8 @@
 import type { LogAppender } from './log-appender.model';
-import type { LogEntry } from 'log-entry';
+import type { LogEntry } from './log/log-entry.model';
 
+import { createErrorLogEntry } from './log/log-entry';
 import { createLogEntryCircularBuffer } from './log-entry-circular-buffer';
-
-import { createErrorLogEntry } from 'log-entry';
 
 export const createHttpLogAppender = (appName: string, url: string, maxLogBufferSizeInMb: number, sendRetryTimer: number): LogAppender => {
     const logBuffer = createLogEntryCircularBuffer(maxLogBufferSizeInMb);

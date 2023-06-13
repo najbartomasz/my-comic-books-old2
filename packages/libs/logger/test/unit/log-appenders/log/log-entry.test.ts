@@ -1,8 +1,8 @@
-import type { LogEntry } from '../../src/log-entry.model';
-import type { LogEntryError } from '../../src/log-entry-error.model';
+import type { LogEntry } from '../../../../src/log-appenders/log/log-entry.model';
+import type { LogEntryError } from '../../../../src/log-appenders/log/log-entry-error.model';
 
-import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from '../../src/log-entry';
-import { LogLevel } from '../../src/log-level';
+import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from '../../../../src/log-appenders/log/log-entry';
+import { LogLevel } from '../../../../src/log-appenders/log/log-level';
 
 describe('log-entry', () => {
     const timestamp = new Date('1987-08-20T15:30:00');

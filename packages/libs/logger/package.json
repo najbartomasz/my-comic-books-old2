@@ -17,9 +17,6 @@
         "test": "jest --coverage test",
         "test:watch": "jest --coverage --watch test"
     },
-    "dependencies": {
-        "log-entry": "file:../../../.bin/log-entry-1.0.0.tgz"
-    },
     "devDependencies": {
         "@types/jest": "29.5.2",
         "@types/jest-when": "3.5.2",

@@ -1,4 +1,4 @@
-import type { LogEntry } from 'log-entry';
+import type { LogEntry } from './log/log-entry.model';
 
 export interface LogEntryCircularBuffer {
     logEntries: LogEntry[];

@@ -1283,7 +1283,7 @@
                 "allowNumber": true,
                 "allowNullableObject": true,
                 "allowNullableBoolean": false,
-                "allowNullableString": false,
+                "allowNullableString": true,
                 "allowNullableNumber": false,
                 "allowAny": false,
                 "allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing": false
