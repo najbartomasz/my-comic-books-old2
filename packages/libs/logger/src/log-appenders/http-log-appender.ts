@@ -5,14 +5,12 @@ import { createLogEntryCircularBuffer } from './log-entry-circular-buffer';
 
 import { createErrorLogEntry } from 'log-entry';
 
-export const createHttpLogAppender = (
-    applicationName: string, url: string, maxLogBufferSizeInMb: number, sendRetryTimer: number
-): LogAppender => {
+export const createHttpLogAppender = (appName: string, url: string, maxLogBufferSizeInMb: number, sendRetryTimer: number): LogAppender => {
     const logBuffer = createLogEntryCircularBuffer(maxLogBufferSizeInMb);
 
     const postLogs = (logEntries: LogEntry[]): void => {
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ logEntries }) })
+        fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(logEntries) })
             .then((): void => {
                 logBuffer.remove(logEntries);
                 if (logBuffer.logEntries.length) {
@@ -20,7 +18,7 @@ export const createHttpLogAppender = (
                 }
             })
             .catch((error: Error): void => {
-                logBuffer.add(createErrorLogEntry(applicationName, 'HttpLogger', 'Failed to post logs.', error));
+                logBuffer.add(createErrorLogEntry(appName, 'HttpLogger', 'Failed to post logs.', error));
                 setTimeout((): void => {
                     postLogs(logBuffer.logEntries);
                 }, sendRetryTimer);

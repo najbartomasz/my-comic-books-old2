@@ -6,7 +6,7 @@ import { LogLevel } from '../../src/log-level';
 
 describe('log-entry', () => {
     const timestamp = new Date('1987-08-20T15:30:00');
-    const applicationName = 'Test';
+    const appName = 'Test';
     const loggerLabel = 'TestLogger';
     const message = 'Test message.';
 
@@ -16,10 +16,10 @@ describe('log-entry', () => {
 
     test('creates info log entry', () => {
         // Given
-        const expectedLogEntry: LogEntry = { timestamp, applicationName, loggerLabel, logLevel: LogLevel.Info, message };
+        const expectedLogEntry: LogEntry = { timestamp, appName, loggerLabel, logLevel: LogLevel.Info, message };
 
         // When
-        const createdLogEntry = createInfoLogEntry(applicationName, loggerLabel, message);
+        const createdLogEntry = createInfoLogEntry(appName, loggerLabel, message);
 
         // Then
         expect(createdLogEntry).toStrictEqual(expectedLogEntry);
@@ -27,10 +27,10 @@ describe('log-entry', () => {
 
     test('creates warn log entry', () => {
         // Given
-        const expectedLogEntry: LogEntry = { timestamp, applicationName, loggerLabel, logLevel: LogLevel.Warn, message };
+        const expectedLogEntry: LogEntry = { timestamp, appName, loggerLabel, logLevel: LogLevel.Warn, message };
 
         // When
-        const createdLogEntry = createWarnLogEntry(applicationName, loggerLabel, message);
+        const createdLogEntry = createWarnLogEntry(appName, loggerLabel, message);
 
         // Then
         expect(createdLogEntry).toStrictEqual(expectedLogEntry);
@@ -38,10 +38,10 @@ describe('log-entry', () => {
 
     test('creates error log entry without error defined', () => {
         // Given
-        const expectedLogEntry: LogEntry = { timestamp, applicationName, loggerLabel, logLevel: LogLevel.Error, message };
+        const expectedLogEntry: LogEntry = { timestamp, appName, loggerLabel, logLevel: LogLevel.Error, message };
 
         // When
-        const createdLogEntry = createErrorLogEntry(applicationName, loggerLabel, message);
+        const createdLogEntry = createErrorLogEntry(appName, loggerLabel, message);
 
         // Then
         expect(createdLogEntry).toStrictEqual(expectedLogEntry);
@@ -53,11 +53,11 @@ describe('log-entry', () => {
         delete error.stack;
         const expectedLogEntryError = { name: 'Error', message: 'Test error message.' };
         const expectedLogEntry: LogEntry = {
-            timestamp, applicationName, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError
+            timestamp, appName, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError
         };
 
         // When
-        const createdLogEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
+        const createdLogEntry = createErrorLogEntry(appName, loggerLabel, message, error);
 
         // Then
         expect(createdLogEntry).toStrictEqual(expectedLogEntry);
@@ -69,11 +69,11 @@ describe('log-entry', () => {
         error.stack = 'Test error stack';
         const expectedLogEntryError: LogEntryError = { name: 'Error', message: 'Test error message.', stack: 'Test error stack' };
         const expectedLogEntry: LogEntry = {
-            timestamp, applicationName, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError
+            timestamp, appName, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError
         };
 
         // When
-        const createdLogEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
+        const createdLogEntry = createErrorLogEntry(appName, loggerLabel, message, error);
 
         // Then
         expect(createdLogEntry).toStrictEqual(expectedLogEntry);
@@ -84,11 +84,11 @@ describe('log-entry', () => {
         const error = 'Test unknown error';
         const expectedLogEntryError: LogEntryError = { name: 'UnknownErrorType', message: '"Test unknown error"' };
         const expectedLogEntry: LogEntry = {
-            timestamp, applicationName, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError
+            timestamp, appName, loggerLabel, logLevel: LogLevel.Error, message, error: expectedLogEntryError
         };
 
         // When
-        const createdLogEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
+        const createdLogEntry = createErrorLogEntry(appName, loggerLabel, message, error);
 
         // Then
         expect(createdLogEntry).toStrictEqual(expectedLogEntry);

@@ -6,7 +6,7 @@ import { createLoggerFactory } from '../../src/logger-factory';
 import * as loggerModule from '../../src/logger';
 
 describe('logger-factory', () => {
-    const applicationName = 'Test';
+    const appName = 'Test';
 
     let loggerFactory: LoggerFactory;
 
@@ -15,7 +15,7 @@ describe('logger-factory', () => {
     beforeEach(() => {
         logAppendersMock = [{ log: jest.fn() }, { log: jest.fn() }, { log: jest.fn() }];
 
-        loggerFactory = createLoggerFactory(applicationName, logAppendersMock);
+        loggerFactory = createLoggerFactory(appName, logAppendersMock);
     });
 
     test('creates logger', () => {
@@ -30,6 +30,6 @@ describe('logger-factory', () => {
         // Then
         expect(createdLogger).toStrictEqual(loggerMock);
         expect(createLoggerSpy).toHaveBeenCalledTimes(1);
-        expect(createLoggerSpy).toHaveBeenCalledWith(applicationName, loggerLabel, logAppendersMock);
+        expect(createLoggerSpy).toHaveBeenCalledWith(appName, loggerLabel, logAppendersMock);
     });
 });

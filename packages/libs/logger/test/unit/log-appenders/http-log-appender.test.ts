@@ -5,7 +5,7 @@ import { createHttpLogAppender } from '../../../src/log-appenders/http-log-appen
 import { createErrorLogEntry, createInfoLogEntry } from 'log-entry';
 
 describe('http-log-appender', () => {
-    const applicationName = 'Test';
+    const appName = 'Test';
     const url = 'http://localhost:3000/v1/log';
     const sendRetryTimer = 100;
     const headers = { 'Content-Type': 'application/json' }; // eslint-disable-line @typescript-eslint/naming-convention
@@ -18,14 +18,14 @@ describe('http-log-appender', () => {
 
     beforeEach(() => {
         const maxLogBufferSizeInMb = 1;
-        httpLogAppender = createHttpLogAppender(applicationName, url, maxLogBufferSizeInMb, sendRetryTimer);
+        httpLogAppender = createHttpLogAppender(appName, url, maxLogBufferSizeInMb, sendRetryTimer);
 
         fetchSpy = jest.spyOn(global, 'fetch');
     });
 
     test('posts log', () => {
         // Given
-        const logEntry = createInfoLogEntry(applicationName, loggerLabel, message);
+        const logEntry = createInfoLogEntry(appName, loggerLabel, message);
         fetchSpy.mockResolvedValueOnce({});
 
         // When
@@ -34,18 +34,18 @@ describe('http-log-appender', () => {
         // Then
         expect(fetchSpy).toHaveBeenCalledTimes(1);
         expect(fetchSpy).toHaveBeenNthCalledWith(
-            1, url, { method: 'POST', headers, body: JSON.stringify({ logEntries: [logEntry] }) }
+            1, url, { method: 'POST', headers, body: JSON.stringify([logEntry]) }
         );
     });
 
     test('adds error log entry and retries posting log when previous attempt failed', async () => {
         // Given
-        const logEntry = createInfoLogEntry(applicationName, loggerLabel, message);
+        const logEntry = createInfoLogEntry(appName, loggerLabel, message);
         const error = new Error('Test error.');
         error.stack = 'Test error stack';
         const errorTime = new Date();
         jest.spyOn(global, 'Date').mockReturnValue(errorTime);
-        const expectedErrorLogEntry = createErrorLogEntry(applicationName, 'HttpLogger', 'Failed to post logs.', error);
+        const expectedErrorLogEntry = createErrorLogEntry(appName, 'HttpLogger', 'Failed to post logs.', error);
         fetchSpy
             .mockRejectedValueOnce(error)
             .mockResolvedValueOnce({});
@@ -57,18 +57,18 @@ describe('http-log-appender', () => {
         // Then
         expect(fetchSpy).toHaveBeenCalledTimes(2);
         expect(fetchSpy).toHaveBeenNthCalledWith(
-            1, url, { method: 'POST', headers, body: JSON.stringify({ logEntries: [logEntry] }) }
+            1, url, { method: 'POST', headers, body: JSON.stringify([logEntry]) }
         );
         expect(fetchSpy).toHaveBeenNthCalledWith(
-            2, url, { method: 'POST', headers, body: JSON.stringify({ logEntries: [logEntry, expectedErrorLogEntry] }) }
+            2, url, { method: 'POST', headers, body: JSON.stringify([logEntry, expectedErrorLogEntry]) }
         );
     });
 
     test('posts logs that occured while waiting for previous post response', async () => {
         // Given
-        const logEntry1 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 1.');
-        const logEntry2 = createErrorLogEntry(applicationName, loggerLabel, 'Test message 2.');
-        const logEntry3 = createInfoLogEntry(applicationName, loggerLabel, 'Test message 3.');
+        const logEntry1 = createInfoLogEntry(appName, loggerLabel, 'Test message 1.');
+        const logEntry2 = createErrorLogEntry(appName, loggerLabel, 'Test message 2.');
+        const logEntry3 = createInfoLogEntry(appName, loggerLabel, 'Test message 3.');
         fetchSpy
             .mockResolvedValueOnce({})
             .mockResolvedValueOnce({});
@@ -82,10 +82,10 @@ describe('http-log-appender', () => {
         // Then
         expect(fetchSpy).toHaveBeenCalledTimes(2);
         expect(fetchSpy).toHaveBeenNthCalledWith(
-            1, url, { method: 'POST', headers, body: JSON.stringify({ logEntries: [logEntry1] }) }
+            1, url, { method: 'POST', headers, body: JSON.stringify([logEntry1]) }
         );
         expect(fetchSpy).toHaveBeenNthCalledWith(
-            2, url, { method: 'POST', headers, body: JSON.stringify({ logEntries: [logEntry2, logEntry3] }) }
+            2, url, { method: 'POST', headers, body: JSON.stringify([logEntry2, logEntry3]) }
         );
     });
 });

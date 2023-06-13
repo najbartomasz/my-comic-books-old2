@@ -7,8 +7,8 @@ import { createPrintableLogEntry } from './log/printable-log-entry';
 
 import { LogLevel } from 'log-entry';
 
-const createPrettyMessage = ({ timestamp, applicationName, loggerLabel, logLevel, message, error }: PrintableLogEntry): string => {
-    const prettyMessage = `[${timestamp}] ${applicationName} ${loggerLabel} ${logLevel}: ${message}`;
+const createPrettyMessage = ({ timestamp, appName, loggerLabel, logLevel, message, error }: PrintableLogEntry): string => {
+    const prettyMessage = `[${timestamp}] ${appName} ${loggerLabel} ${logLevel}: ${message}`;
     if (error) {
         const stack = (error.stack === undefined) ? '' : `\n${error.stack}`;
         return `${prettyMessage}\nCaused by: ${error.name} ${error.message}${stack}`;

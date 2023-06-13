@@ -6,7 +6,7 @@ import { createLogger } from '../../src/logger';
 import { createErrorLogEntry, createInfoLogEntry, createWarnLogEntry } from 'log-entry';
 
 describe('logger', () => {
-    const applicationName = 'Test';
+    const appName = 'Test';
     const loggerLabel = 'TestLogger';
     const message = 'Test message.';
     const timestamp = new Date('1987-08-20T15:30:00');
@@ -21,13 +21,13 @@ describe('logger', () => {
         logAppender1Mock = { log: jest.fn() };
         logAppender2Mock = { log: jest.fn() };
 
-        logger = createLogger(applicationName, loggerLabel, [logAppender1Mock, logAppender2Mock]);
+        logger = createLogger(appName, loggerLabel, [logAppender1Mock, logAppender2Mock]);
     });
 
 
     test('logs info message', () => {
         // Given
-        const expectedLogEntry = createInfoLogEntry(applicationName, loggerLabel, message);
+        const expectedLogEntry = createInfoLogEntry(appName, loggerLabel, message);
 
         // When
         logger.info(message);
@@ -41,7 +41,7 @@ describe('logger', () => {
 
     test('logs warn message', () => {
         // Given
-        const expectedLogEntry = createWarnLogEntry(applicationName, loggerLabel, message);
+        const expectedLogEntry = createWarnLogEntry(appName, loggerLabel, message);
 
         // When
         logger.warn(message);
@@ -55,7 +55,7 @@ describe('logger', () => {
 
     test('logs error message without defined error', () => {
         // Given
-        const expectedLogEntry = createErrorLogEntry(applicationName, loggerLabel, message);
+        const expectedLogEntry = createErrorLogEntry(appName, loggerLabel, message);
 
         // When
         logger.error(message);
@@ -71,7 +71,7 @@ describe('logger', () => {
         // Given
         const error = new Error('Test error message.');
         error.stack = 'Test error stack';
-        const expectedLogEntry = createErrorLogEntry(applicationName, loggerLabel, message, error);
+        const expectedLogEntry = createErrorLogEntry(appName, loggerLabel, message, error);
 
         // When
         logger.error(message, error);

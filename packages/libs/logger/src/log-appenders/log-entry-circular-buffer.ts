@@ -13,8 +13,9 @@ export const createLogEntryCircularBuffer = (sizeInMb: number): LogEntryCircular
     const getBufferCurrentSize = (): number => buffer.map(stringifyLogEntry).join('').length;
 
     const removeLogEntryFromBuffer = (logEntry: LogEntry): void => {
-        const logEntryIndex = buffer.findIndex(({ timestamp, loggerLabel, logLevel, message, error }): boolean => (
+        const logEntryIndex = buffer.findIndex(({ timestamp, appName, loggerLabel, logLevel, message, error }): boolean => (
             logEntry.timestamp.getTime() === timestamp.getTime()
+            && logEntry.appName === appName
             && logEntry.loggerLabel === loggerLabel
             && logEntry.logLevel === logLevel
             && logEntry.message === message
